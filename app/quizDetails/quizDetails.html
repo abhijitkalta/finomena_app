@@ -1,15 +1,41 @@
-<div id="myQuiz">
+<div id="quiz">
   <h1> Test your knowledge: </h1>
-  <div class="progress"></div>
+  <div class="progress">
 
-  <div class="intro">
-    <h2>Welcome</h2>
-    <p>Click begin to test your knowledge</p>
-    <p class="btn">Begin</p>
   </div>
 
-  <div class="question"></div>
+  <div class="intro {{(activeQuestion > -1) ? 'inactive' : 'active'}}">
+    <form name="myForm">
+      <p>Enter your Name:
+        <input name="myName" ng-model="myName" required>
+        <span  ng-show="myForm.myName.$touched && myForm.myName.$invalid">The name is required.</span>
+        <button ng-disabled="myForm.myName.$pristine" type="button" class="btn btn-success" ng-click="selectName()">Submit</button>
+      </p>
+    <div ng-show="val">
+      <p>Click begin to test your knowledge. </p>
+      <button type="button" class="btn btn-success" ng-click="selectContinue()">Begin</button>
+    </div>
+  </div>
 
-  <div class="results"></div>
+  <div class="questions {{ $index === activeQuestion ? 'active' : 'inactive'}}"
+        ng-repeat="myQuestion in quizData">
+    <p class="txt">{{myQuestion.question}}</p>
+    <p class="ans"  angular-ripple ng-click="selectAnswer($parent.$index , $index)" ng-repeat="answer in myQuestion.answers">{{answer.text}}</p>
+
+
+  </div>
+
+
+
+  <div class="results {{ (totalQuestions === activeQuestion) ? 'active' : 'inactive' }}">
+    <h3>Results</h3>
+    <p>You scored {{percentage}}% by answering correctly {{score}} of the total {{totalQuestions}} questions.</p>
+    <div ng-repeat="myQuestion in quizData">
+      <p class="txt">{{$index+1}}.  {{myQuestion.question}}</p>
+      <p class="txt">Correct Value: {{myQuestion.answers[myQuestion.correctValue].text}}</p>
+      <p class="txt">Selected Value: {{myQuestion.answers[myQuestion.selected].text}}</p>
+    </div>
+
+  </div>
 
 </div>
